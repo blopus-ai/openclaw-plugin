@@ -1,0 +1,60 @@
+{
+  "name": "@blopus-ai/openclaw-plugin",
+  "version": "0.1.1",
+  "description": "Give your agent the open web: search, read full pages, and pull images \u2014 from an index Blopus crawls itself, not a reseller of another engine's results. blopus_search (freshness windows, domain filters, inline full text, hero images) + blopus_fetch (complete page text, 50 URLs per call) + image search (beta). Free key at blopus.ai",
+  "type": "module",
+  "main": "./dist/index.js",
+  "license": "MIT",
+  "homepage": "https://blopus.ai",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blopus-ai/openclaw-plugin.git"
+  },
+  "keywords": [
+    "openclaw",
+    "openclaw-plugin",
+    "clawhub",
+    "blopus",
+    "search",
+    "web-search",
+    "news-search",
+    "fetch",
+    "agent-tools",
+    "mcp"
+  ],
+  "peerDependencies": {
+    "openclaw": "*",
+    "typebox": "*"
+  },
+  "openclaw": {
+    "compat": {
+      "pluginApi": "1.0.0"
+    },
+    "build": {
+      "openclawVersion": "1.0.0"
+    },
+    "icon": "./icon.svg",
+    "extensions": [
+      "./index.ts"
+    ],
+    "runtimeExtensions": [
+      "./dist/index.js"
+    ]
+  },
+  "bugs": {
+    "url": "https://github.com/blopus-ai/openclaw-plugin/issues"
+  },
+  "author": "Blopus",
+  "files": [
+    "index.ts",
+    "dist",
+    "openclaw.plugin.json",
+    "icon.svg",
+    "icon-512.png",
+    "icon-180.png",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc index.ts --outDir dist --target es2022 --module es2022 --moduleResolution bundler --skipLibCheck"
+  }
+}
