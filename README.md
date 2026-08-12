@@ -1,9 +1,40 @@
 # Blopus for OpenClaw
 
-**Give your agent the open web.** Search, read full pages, and pull images — from an index
-Blopus crawls itself, not a reseller of another engine's results.
+## Give OpenClaw the power of search
+
+An OpenClaw agent without search is reasoning from memory alone — it can't tell you what
+happened this morning, can't read the page you're asking about, and can't cite anything.
+
+This plugin fixes that with two tools. Your agent **searches the live web**, **reads whole
+pages** instead of guessing from snippets, and **pulls images** it can show you. All from an
+index Blopus crawls itself — so when coverage or freshness needs to improve, we improve it,
+rather than waiting on whoever we'd otherwise be reselling.
 
 → **[blopus.ai](https://blopus.ai)**
+
+---
+
+## How it compares
+
+| Capability | **Blopus** | Brave | Tavily | Exa | Serper / SerpAPI |
+|---|---|---|---|---|---|
+| Runs its own search index | **✓** | ✓ | ~ | ✓ | — |
+| Made for AI agents | **✓** | ~ | ✓ | ✓ | — |
+| Pulls full pages, not just links | **✓** | — | ✓ | ✓ | — |
+| Connects in one line | **✓** | ~ | ~ | ~ | — |
+| Flat price · hard cap · no surprises | **✓** | — | — | — | ~ |
+| Live usage, with alerts | **✓** | ~ | ~ | ~ | ~ |
+| Image search *(beta)* | **~** | ✓ | ? | ? | ? |
+| **Cost per 1,000 searches** | **~$1.65–2.33** | ~$3–9 | ~$5–8 | ~$7 | ~$0.30–1 |
+| **Starts at** | **$7/mo** | ~$5 credit | $30/mo | usage-based | $25/mo |
+
+✓ full · ~ partial or varies by tier · — not offered · ? unverified
+
+Two rows matter most for agents. **Full page retrieval** — Brave doesn't offer it, so you end
+up bolting a scraper onto your search calls. And **flat pricing with a hard cap** — an agent
+in a loop is the fastest way to an unexpected bill, and a hard cap means that can't happen.
+
+Current figures and tiers: **[blopus.ai](https://blopus.ai)**.
 
 ---
 
