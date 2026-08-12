@@ -3,7 +3,7 @@
 **Give your agent the open web.** Search, read full pages, and pull images — from an index
 Blopus crawls itself, not a reseller of another engine's results.
 
-→ **[blopus.ai](https://blopus.ai)** · free key, no card required
+→ **[blopus.ai](https://blopus.ai)**
 
 ---
 
@@ -31,14 +31,58 @@ accidentally burn credits (see below).
 
 ## Setup
 
-1. Get a free key at **[blopus.ai](https://blopus.ai)** — starts with `blp_live_`
-2. Add it to your OpenClaw config:
+### 1. Generate an API key
 
-```json
-{ "blopus": { "apiKey": "blp_live_xxxxxxxxxxxxxxxxxxxx" } }
+1. Go to **[blopus.ai](https://blopus.ai)** and sign in (or create an account)
+2. Open **API keys** in the dashboard
+3. Click **Create API key**, give it a **Key name** — e.g. `openclaw` — and create it
+4. Click **Reveal** and copy the key. It starts with `blp_live_`
+
+Keep it somewhere safe: treat it like a password. You can create separate keys per
+integration and revoke any of them from **Active keys** without affecting the others.
+
+### 2. Enable the plugin in OpenClaw
+
+Install it:
+
+```bash
+openclaw plugins install clawhub:@blopus-ai/openclaw-plugin
 ```
 
-That's it. Both tools are available immediately.
+Then add your key to the plugin config:
+
+```json
+{
+  "blopus": {
+    "apiKey": "blp_live_xxxxxxxxxxxxxxxxxxxx"
+  }
+}
+```
+
+Optional — override the API base URL (rarely needed):
+
+```json
+{
+  "blopus": {
+    "apiKey": "blp_live_xxxxxxxxxxxxxxxxxxxx",
+    "baseUrl": "https://api.blopus.ai"
+  }
+}
+```
+
+### 3. Check it works
+
+Ask your agent to search for something recent — for example *"what happened in the markets
+today?"* It should call `blopus_search` and come back with dated results and source domains.
+
+**If it says Blopus needs an API key**, the plugin loaded but the config isn't being read —
+confirm the key sits under a `blopus` object and that you restarted the agent after editing.
+
+**If you get an HTTP 401**, the key is wrong or was revoked. Generate a new one under
+**API keys → Create API key** and replace it.
+
+**If you get an HTTP 429 or a quota error**, you've hit your plan's limit. Check **Overview**
+and **Billing** in the dashboard.
 
 ## Capabilities in detail
 
@@ -51,7 +95,7 @@ That's it. Both tools are available immediately.
 | `freshness` | Bound recency: `pd` (24h), `pw`, `pm`, `p3m`, `p1y`, `all`. |
 | `include_domains` / `exclude_domains` | Constrain to trusted sources, or filter noise. |
 | `include_content` | Return full page text inline instead of snippets — one call instead of search + fetch. |
-| `include_images` *(beta)* | Attach each result's hero image URL, plus width and height. **Free.** |
+| `include_images` *(beta)* | Attach each result's hero image URL, plus width and height. |
 | `count` | Results to return. |
 
 Every result carries `title`, `url`, `snippet`, `domain`, `published_at` and a relevance
@@ -73,7 +117,7 @@ pricing model to avoid waste.
 
 ## Images (beta)
 
-`include_images` is opt-in and free. It's off by default because it adds tokens most queries
+`include_images` is opt-in. It's off by default because it adds tokens most queries
 don't need — but when a user asks to *see* something, turn it on and render the URLs directly:
 
 ```
@@ -96,7 +140,7 @@ Same tools, same key.
 
 ## More
 
-- **[blopus.ai](https://blopus.ai)** — free key, pricing, and how the index is built
+- **[blopus.ai](https://blopus.ai)** — API keys, pricing, and how the index is built
 - **[docs.blopus.ai](https://docs.blopus.ai)** — full API reference, Python and TypeScript SDKs
 - Also ships as `blopus` on PyPI and npm, plus a hosted MCP endpoint
 

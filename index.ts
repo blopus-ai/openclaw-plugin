@@ -8,7 +8,7 @@ async function call(path: string, body: unknown, config: any, signal?: AbortSign
   const apiKey = config.apiKey;
   if (!apiKey) {
     throw new Error(
-      "Blopus needs an API key. Get a free one at https://blopus.ai and set it as " +
+      "Blopus needs an API key. Get one at https://blopus.ai and set it as " +
         "`apiKey` in this plugin's config.",
     );
   }
@@ -86,7 +86,7 @@ export default defineToolPlugin({
         include_images: Type.Optional(
           Type.Boolean({
             description:
-              "Attach each result's hero image URL. Free. Off by default — it costs tokens " +
+              "Attach each result's hero image URL. Off by default — it costs tokens " +
               "most queries do not need. May be null per result; always check before rendering.",
           }),
         ),

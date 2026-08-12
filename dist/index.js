@@ -5,7 +5,7 @@ const DEFAULT_BASE_URL = "https://api.blopus.ai";
 async function call(path, body, config, signal) {
     const apiKey = config.apiKey;
     if (!apiKey) {
-        throw new Error("Blopus needs an API key. Get a free one at https://blopus.ai and set it as " +
+        throw new Error("Blopus needs an API key. Get one at https://blopus.ai and set it as " +
             "`apiKey` in this plugin's config.");
     }
     const res = await fetch(`${config.baseUrl ?? DEFAULT_BASE_URL}${path}`, {
@@ -62,7 +62,7 @@ export default defineToolPlugin({
                 exclude_domains: Type.Optional(Type.Array(Type.String(), { description: "Drop results from these hostnames." })),
                 include_content: Type.Optional(Type.Boolean({ description: "Return full page text inline instead of a snippet." })),
                 include_images: Type.Optional(Type.Boolean({
-                    description: "Attach each result's hero image URL. Free. Off by default — it costs tokens " +
+                    description: "Attach each result's hero image URL. Off by default — it costs tokens " +
                         "most queries do not need. May be null per result; always check before rendering.",
                 })),
             }),
