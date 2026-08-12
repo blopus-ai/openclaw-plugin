@@ -1,6 +1,6 @@
 {
   "name": "@blopus-ai/openclaw-plugin",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Give your agent the open web: search, read full pages, and pull images \u2014 from an index Blopus crawls itself, not a reseller of another engine's results. blopus_search (freshness windows, domain filters, inline full text, hero images) + blopus_fetch (complete page text, 50 URLs per call) + image search (beta). Get an API key at blopus.ai",
   "type": "module",
   "main": "./dist/index.js",

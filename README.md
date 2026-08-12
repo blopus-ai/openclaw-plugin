@@ -24,7 +24,7 @@ rather than waiting on whoever we'd otherwise be reselling.
 | Connects in one line | **✓** | ~ | ~ | ~ | — |
 | Flat price · hard cap · no surprises | **✓** | — | — | — | ~ |
 | Live usage, with alerts | **✓** | ~ | ~ | ~ | ~ |
-| Image search *(beta)* | **~** | ✓ | ? | ? | ? |
+| Image search | **✓** *(beta)* | ✓ | ? | ? | ? |
 | **Cost per 1,000 searches** | **~$1.65–2.33** | ~$3–9 | ~$5–8 | ~$7 | ~$0.30–1 |
 | **Starts at** | **$7/mo** | ~$5 credit | $30/mo | usage-based | $25/mo |
 
