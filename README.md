@@ -1,3 +1,5 @@
+<img src="https://raw.githubusercontent.com/blopus-ai/openclaw-plugin/master/icon.svg" alt="Blopus" width="72" height="72">
+
 # Blopus for OpenClaw
 
 ## Give OpenClaw the power of search
