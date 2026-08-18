@@ -90,6 +90,31 @@ export default defineToolPlugin({
               "most queries do not need. May be null per result; always check before rendering.",
           }),
         ),
+        topics: Type.Optional(
+          Type.Array(Type.String(), {
+            description:
+              "Only return results from publications covering these topics, e.g. " +
+              "['cybersecurity']. IMPORTANT: a topic describes what a PUBLICATION " +
+              "covers, not what an individual article is about — ['ai'] means 'pages " +
+              "from AI-focused sites', broader than 'pages about AI'. Matched exactly; " +
+              "unknown topics match nothing, so do not guess values.",
+          }),
+        ),
+        exclude_topics: Type.Optional(
+          Type.Array(Type.String(), {
+            description: "Drop results from publications covering these topics, e.g. ['sports'].",
+          }),
+        ),
+        min_words: Type.Optional(
+          Type.Number({
+            description:
+              "Only return pages with at least this many words. Set 120 when the user " +
+              "wants something to READ — analysis, background, a comparison, 'explain', " +
+              "'how does'. Roughly 10-17% of the index is tag listings and stubs that " +
+              "rank on keywords without answering anything. Leave unset for breaking " +
+              "news, where a two-line wire story is a legitimate answer.",
+          }),
+        ),
       }),
       async execute(params, config, context) {
         context.signal?.throwIfAborted();
@@ -104,6 +129,8 @@ export default defineToolPlugin({
             domain: r.domain,
             published_at: r.published_at,
             score: r.score,
+            // always returned: lets the model see a stub before it reads one
+            word_count: r.word_count,
             // present only when include_content / include_images were requested
             ...(r.content ? { content: r.content } : {}),
             ...(r.image ? { image: r.image, image_w: r.image_w, image_h: r.image_h } : {}),
