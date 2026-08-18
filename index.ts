@@ -90,6 +90,21 @@ export default defineToolPlugin({
               "most queries do not need. May be null per result; always check before rendering.",
           }),
         ),
+        topics: Type.Optional(
+          Type.Array(Type.String(), {
+            description:
+              "Only return results from publications covering these topics, e.g. " +
+              "['cybersecurity']. IMPORTANT: a topic describes what a PUBLICATION " +
+              "covers, not what an individual article is about — ['ai'] means 'pages " +
+              "from AI-focused sites', broader than 'pages about AI'. Matched exactly; " +
+              "unknown topics match nothing, so do not guess values.",
+          }),
+        ),
+        exclude_topics: Type.Optional(
+          Type.Array(Type.String(), {
+            description: "Drop results from publications covering these topics, e.g. ['sports'].",
+          }),
+        ),
         min_words: Type.Optional(
           Type.Number({
             description:

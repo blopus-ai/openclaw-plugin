@@ -33,7 +33,7 @@
       "requiresConfig": [
         "apiKey"
       ],
-      "summary": "Web & news search over an independently crawled index. news_only for events, freshness to bound recency, include_domains/exclude_domains to constrain sources, include_content for inline full text, include_images for hero image URLs, min_words to drop stubs and tag listings. Billed per block of 10 — count 1 and count 10 cost the same."
+      "summary": "Web & news search over an independently crawled index. news_only for events, freshness to bound recency, include_domains/exclude_domains to constrain sources, include_content for inline full text, include_images for hero image URLs, min_words to drop stubs and tag listings, topics/exclude_topics to scope by subject area. Billed per block of 10 — count 1 and count 10 cost the same."
     },
     "blopus_fetch": {
       "requiresConfig": [

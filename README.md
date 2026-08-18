@@ -129,6 +129,7 @@ and **Billing** in the dashboard.
 | `include_domains` / `exclude_domains` | Constrain to trusted sources, or filter noise. |
 | `include_content` | Return full page text inline instead of snippets — one call instead of search + fetch. |
 | `include_images` *(beta)* | Attach each result's hero image URL, plus width and height. |
+| `topics` / `exclude_topics` | Scope to (or away from) whole subject areas, e.g. `['cybersecurity']`. Source-level: describes what a publication covers, not what an article is about. |
 | `min_words` | Only return pages with at least N words. Use `120` when the user wants something to read — it drops tag listings and stubs. Leave it off for breaking news. |
 | `count` | Results to return. |
 
