@@ -129,6 +129,7 @@ and **Billing** in the dashboard.
 | `include_domains` / `exclude_domains` | Constrain to trusted sources, or filter noise. |
 | `include_content` | Return full page text inline instead of snippets — one call instead of search + fetch. |
 | `include_images` *(beta)* | Attach each result's hero image URL, plus width and height. |
+| `min_words` | Only return pages with at least N words. Use `120` when the user wants something to read — it drops tag listings and stubs. Leave it off for breaking news. |
 | `count` | Results to return. |
 
 Every result carries `title`, `url`, `snippet`, `domain`, `published_at` and a relevance
