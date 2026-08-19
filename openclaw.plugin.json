@@ -1,7 +1,7 @@
 {
   "id": "blopus",
-  "name": "Blopus — Web Search, Fetch & Images",
-  "description": "Give your agent the open web: search, read full pages, and pull images — from an index Blopus crawls itself, not a reseller of another engine's results. blopus_search (freshness windows, domain filters, inline full text, hero images) + blopus_fetch (complete page text, 50 URLs per call) + image search (beta). Get an API key at blopus.ai",
+  "name": "Blopus \u2014 Web Search, Fetch & Images",
+  "description": "Give your agent the open web: search, read full pages, and search images \u2014 from an index Blopus crawls itself, not a reseller of another engine's results. blopus_search (freshness windows, domain filters, inline full text) + blopus_images (a dedicated image index, not hero images scraped off web results) + blopus_fetch (complete page text, 50 URLs per call). Get an API key at blopus.ai",
   "configSchema": {
     "type": "object",
     "additionalProperties": false,
@@ -12,7 +12,7 @@
       "apiKey": {
         "type": "string",
         "title": "Blopus API key",
-        "description": "Get one at https://blopus.ai — starts with blp_live_",
+        "description": "Get one at https://blopus.ai \u2014 starts with blp_live_",
         "pattern": "^blp_(live|test)_[A-Za-z0-9]+$"
       },
       "baseUrl": {
@@ -33,13 +33,13 @@
       "requiresConfig": [
         "apiKey"
       ],
-      "summary": "Web & news search over an independently crawled index. news_only for events, freshness to bound recency, include_domains/exclude_domains to constrain sources, include_content for inline full text, include_images for hero image URLs, min_words to drop stubs and tag listings, topics/exclude_topics to scope by subject area. Billed per block of 10 — count 1 and count 10 cost the same."
+      "summary": "Web & news search over an independently crawled index. news_only for events, freshness to bound recency, include_domains/exclude_domains to constrain sources, include_content for inline full text, include_images for hero image URLs, min_words to drop stubs and tag listings, topics/exclude_topics to scope by subject area. Billed per block of 10 \u2014 count 1 and count 10 cost the same."
     },
     "blopus_fetch": {
       "requiresConfig": [
         "apiKey"
       ],
-      "summary": "Complete text of indexed pages. Batch up to 50 URLs in ONE call for the price of one search — always batch rather than looping. Unindexed URLs return in failed_results, not charged."
+      "summary": "Complete text of indexed pages. Batch up to 50 URLs in ONE call for the price of one search \u2014 always batch rather than looping. Unindexed URLs return in failed_results, not charged."
     }
   },
   "icon": "./icon.svg"

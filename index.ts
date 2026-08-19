@@ -25,7 +25,16 @@ async function call(path: string, body: unknown, config: any, signal?: AbortSign
     let detail = "";
     try {
       const j: any = await res.json();
-      detail = j?.message ?? j?.error ?? "";
+      // The API returns { error: { code, message } }. Reading j.error directly
+      // concatenated an OBJECT, so every failure reached the user as
+      // "[object Object]" instead of the reason. Handle the nested shape first,
+      // then the flat ones, and never interpolate a non-string.
+      const e = j?.error;
+      const cand =
+        (e && typeof e === "object" ? (e.message ?? e.code) : e) ??
+        j?.message ??
+        j?.detail;
+      detail = typeof cand === "string" ? cand : cand ? JSON.stringify(cand) : "";
     } catch {
       /* non-JSON error body */
     }
@@ -134,6 +143,56 @@ export default defineToolPlugin({
             // present only when include_content / include_images were requested
             ...(r.content ? { content: r.content } : {}),
             ...(r.image ? { image: r.image, image_w: r.image_w, image_h: r.image_h } : {}),
+          })),
+        };
+      },
+    }),
+    tool({
+      name: "blopus_images",
+      label: "Blopus Images",
+      description:
+        "Search Blopus's own image index and return picture URLs. Use it when the user wants " +
+        "to SEE something — 'show me', 'what does X look like', 'find a photo of X' — or when " +
+        "a picture would illustrate the answer. " +
+        "This is NOT blopus_search with include_images: that runs a WEB search and returns " +
+        "whatever hero image those articles happened to use, so 'blue birds' comes back with " +
+        "press photos from Blue Bird Corporation. This one ranks the image index itself and " +
+        "returns pictures OF the subject. " +
+        "Render with ![caption](url) using `caption`, not `title`: `title` is the raw alt " +
+        "attribute and is empty or a mangled filename on roughly a quarter of images, so never " +
+        "discard a result for having an ugly title. NEVER invent an image URL — a guessed one " +
+        "404s and shows a broken image. Results come in blocks of 10, so count 10 and count 1 " +
+        "cost the same.",
+      parameters: Type.Object({
+        query: Type.String({ description: "What the picture should show." }),
+        count: Type.Optional(
+          Type.Number({ description: "Images to return; rounds up to a block of 10.", default: 10 }),
+        ),
+        max_syndication: Type.Optional(
+          Type.Number({
+            description:
+              "Cap on how many pages an image may appear on. Default 30, which suppresses " +
+              "stock photography and site furniture. Lower it for something distinctive.",
+            default: 30,
+          }),
+        ),
+      }),
+      async execute(params, config, context) {
+        context.signal?.throwIfAborted();
+        const data: any = await call("/v1/images", params, config, context.signal);
+        return {
+          query: data.query,
+          count: data.count,
+          results: (data.results ?? []).map((r: any) => ({
+            // caption first: it is the field to render, and `title` is often junk
+            caption: r.caption,
+            url: r.url,
+            width: r.width,
+            height: r.height,
+            title: r.title,
+            page_url: r.page_url,
+            page_title: r.page_title,
+            domain: r.domain,
           })),
         };
       },
