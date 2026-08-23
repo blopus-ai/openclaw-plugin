@@ -46,6 +46,7 @@ Current figures and tiers: **[blopus.ai](https://blopus.ai)**.
 |---|---|---|
 | 🔍 | **`blopus_search`** | Web and news search. Freshness windows, domain include/exclude, inline full text, topic filters, minimum length. |
 | 🖼️ | **`blopus_images`** *(beta)* | Search the image index itself. Ranks pictures **of** the subject, with captions written to be rendered. |
+| 🏷️ | **`blopus_topics`** | The vocabulary for the `topics` filters. **Free** — it costs no credits. |
 | 📄 | **`blopus_fetch`** | The complete text of any indexed page. Batch up to 50 URLs in a single call. |
 
 ## Why it's different
@@ -157,6 +158,23 @@ mangled filename on roughly a quarter of images; `caption` is written to be show
 
 Never let an agent invent an image URL — a guessed one 404s and renders as a broken image.
 
+### `blopus_topics`
+
+| Parameter | Use it when |
+|---|---|
+| `min_docs` | Hide labels too small to be useful. Default `1000` (~1,260 topics); `100000` gives ~110 of only the largest areas. |
+
+Returns topic **names**, ready to pass straight to `topics` / `exclude_topics`.
+
+**This call is free** — it is not billed. That is deliberate: topics match *exactly*, so a wrong
+guess returns zero results that look identical to a genuine no-match. Charging for the lookup
+would guarantee guessing. Call it once when you need a value you are unsure of and reuse the
+answer; there is no reason to call it repeatedly.
+
+A topic describes what a **publication** covers, not what an individual article is about.
+`ai` means "pages from AI-focused sites" — broader and coarser than "pages about AI". Use it to
+scope or de-noise a search, never instead of putting the subject in the query.
+
 ### `blopus_fetch`
 
 Pass `url` for one page, or `urls` for a batch of up to 50. **Always prefer the batch** — it
@@ -165,7 +183,7 @@ each. URLs not in the index come back in `failed_results` and are not charged.
 
 ## Cost model worth knowing
 
-Results are billed **per block of 10**. `count: 1` and `count: 10` cost exactly the same, so
+`blopus_topics` is **not billed at all**. Everything else: results are billed **per block of 10**. `count: 1` and `count: 10` cost exactly the same, so
 there is no reason for an agent to ask for fewer than 10. A 50-URL `blopus_fetch` batch costs
 the same as one search. This is deliberate — agents shouldn't have to optimise against a
 pricing model to avoid waste.

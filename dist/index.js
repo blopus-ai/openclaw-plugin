@@ -2,19 +2,29 @@ import { Type } from "typebox";
 import { defineToolPlugin } from "openclaw/plugin-sdk/tool-plugin";
 const DEFAULT_BASE_URL = "https://api.blopus.ai";
 /** Blopus returns structured JSON errors; surface the message rather than a bare status. */
-async function call(path, body, config, signal) {
+async function call(path, body, config, signal, method = "POST") {
     const apiKey = config.apiKey;
     if (!apiKey) {
         throw new Error("Blopus needs an API key. Get one at https://blopus.ai and set it as " +
             "`apiKey` in this plugin's config.");
     }
-    const res = await fetch(`${config.baseUrl ?? DEFAULT_BASE_URL}${path}`, {
-        method: "POST",
+    // 🔴 /v1/topics is a GET with query params, not a POST body. fetch throws
+    // "Request with GET/HEAD method cannot have body", so for GET the body becomes a query
+    // string and both the body and Content-Type are omitted rather than sent empty.
+    const isGet = method === "GET";
+    const qs = isGet && body && typeof body === "object"
+        ? "?" +
+            new URLSearchParams(Object.entries(body)
+                .filter(([, v]) => v !== undefined && v !== null)
+                .map(([k, v]) => [k, String(v)])).toString()
+        : "";
+    const res = await fetch(`${config.baseUrl ?? DEFAULT_BASE_URL}${path}${qs}`, {
+        method,
         headers: {
             Authorization: `Bearer ${apiKey}`,
-            "Content-Type": "application/json",
+            ...(isGet ? {} : { "Content-Type": "application/json" }),
         },
-        body: JSON.stringify(body),
+        ...(isGet ? {} : { body: JSON.stringify(body) }),
         signal,
     });
     if (!res.ok) {
@@ -40,14 +50,31 @@ async function call(path, body, config, signal) {
 }
 export default defineToolPlugin({
     id: "blopus",
-    name: "Blopus Search",
-    description: "Web search and page fetch over an independently crawled index — not a reseller of " +
-        "another engine's results. Freshness filtering, domain include/exclude, inline " +
-        "content, and hero images.",
+    // 🔴 Everything below is the SOURCE for openclaw.plugin.json — `openclaw plugins build`
+    // regenerates that file from this object, and `openclaw plugins validate` fails when the two
+    // differ. Editing the manifest by hand looks fine and is silently reverted by the next
+    // build, which is how blopus_images ended up declared in no contract at all. Change it HERE.
+    name: "Blopus — Web Search, Fetch & Images",
+    description: "Give your agent the open web: search, read full pages, and search images — from an index " +
+        "Blopus crawls itself, not a reseller of another engine's results. " +
+        "blopus_search (freshness windows, domain filters, topic filters, inline full text) + " +
+        "blopus_images (a dedicated image index, not hero images scraped off web results) + " +
+        "blopus_topics (the filter vocabulary, free) + blopus_fetch (complete page text, 50 URLs " +
+        "per call). Get an API key at blopus.ai",
     configSchema: Type.Object({
-        apiKey: Type.Optional(Type.String({ description: "Blopus API key (blp_live_...). Get one at https://blopus.ai" })),
-        baseUrl: Type.Optional(Type.String({ description: `Blopus API base URL. Defaults to ${DEFAULT_BASE_URL}` })),
-    }),
+        apiKey: Type.Optional(Type.String({
+            title: "Blopus API key",
+            description: "Get one at https://blopus.ai — starts with blp_live_",
+            pattern: "^blp_(live|test)_[A-Za-z0-9_-]+$",
+        })),
+        baseUrl: Type.Optional(Type.String({
+            title: "API base URL",
+            description: `Blopus API base URL. Defaults to ${DEFAULT_BASE_URL}`,
+            default: DEFAULT_BASE_URL,
+        })),
+    }, 
+    // Catches a mistyped config key at load time instead of at the first call.
+    { additionalProperties: false }),
     tools: (tool) => [
         tool({
             name: "blopus_search",
@@ -154,6 +181,39 @@ export default defineToolPlugin({
                         page_title: r.page_title,
                         domain: r.domain,
                     })),
+                };
+            },
+        }),
+        tool({
+            name: "blopus_topics",
+            label: "Blopus Topics",
+            description: "List the subject areas you can pass to `topics` / `exclude_topics` on blopus_search. " +
+                "FREE \u2014 this call costs no credits, because a topic is matched EXACTLY and a wrong " +
+                "guess returns zero results that look identical to a genuine no-match. " +
+                "Call it once when you need a value you are unsure of, then reuse the answer for the " +
+                "rest of the conversation rather than calling it again. " +
+                "`min_docs` (default 1000) hides labels too small to be useful; raise it to 100000 for " +
+                "a short list of only the largest areas. " +
+                "IMPORTANT: a topic describes what a PUBLICATION covers, not what an individual article " +
+                "is about \u2014 'ai' means 'pages from AI-focused sites', which is broader and coarser " +
+                "than 'pages about AI'. Use it to scope or de-noise a search, never as a substitute for " +
+                "putting the subject in the query itself.",
+            parameters: Type.Object({
+                min_docs: Type.Optional(Type.Number({
+                    description: "Hide topics with fewer than this many indexed pages. Default 1000; 100000 " +
+                        "returns only the largest areas.",
+                    default: 1000,
+                })),
+            }),
+            async execute(params, config, context) {
+                context.signal?.throwIfAborted();
+                const data = await call("/v1/topics", params, config, context.signal, "GET");
+                return {
+                    // Names only: the document counts roughly triple the payload and a model picking a
+                    // filter does not need them. Mirrors what the MCP server returns.
+                    topics: (data.topics ?? []).map((t) => t.topic ?? t),
+                    count: data.count,
+                    min_docs: data.min_docs,
                 };
             },
         }),
