@@ -44,9 +44,9 @@ Current figures and tiers: **[blopus.ai](https://blopus.ai)**.
 
 | | Tool | What it does |
 |---|---|---|
-| 🔍 | **`blopus_search`** | Web and news search. Freshness windows, domain include/exclude, inline full text, hero images. |
+| 🔍 | **`blopus_search`** | Web and news search. Freshness windows, domain include/exclude, inline full text, topic filters, minimum length. |
+| 🖼️ | **`blopus_images`** *(beta)* | Search the image index itself. Ranks pictures **of** the subject, with captions written to be rendered. |
 | 📄 | **`blopus_fetch`** | The complete text of any indexed page. Batch up to 50 URLs in a single call. |
-| 🖼️ | **image search** *(beta)* | Set `include_images` and every result carries its hero image URL, ready to render. |
 
 ## Why it's different
 
@@ -137,6 +137,26 @@ Every result carries `title`, `url`, `snippet`, `domain`, `published_at` and a r
 `score`. With `include_images`, results also carry `image`, `image_w`, `image_h` — `image`
 may be `null`, since not every page has one, so check before rendering.
 
+### `blopus_images`
+
+| Parameter | Use it when |
+|---|---|
+| `query` | What the picture should show. |
+| `count` | Images to return. Rounds up to a block of 10. |
+| `max_syndication` | Cap on how many pages an image may appear on. Default `30`, which suppresses stock photography and site furniture. Lower it for something distinctive. |
+
+Each result carries `caption`, `url`, `width`, `height`, `title`, `page_url`, `page_title` and
+`domain`.
+
+**Render with `caption`, not `title`.** `title` is the raw `alt` attribute and is empty or a
+mangled filename on roughly a quarter of images; `caption` is written to be shown:
+
+```
+![caption](url)
+```
+
+Never let an agent invent an image URL — a guessed one 404s and renders as a broken image.
+
 ### `blopus_fetch`
 
 Pass `url` for one page, or `urls` for a batch of up to 50. **Always prefer the batch** — it
@@ -150,17 +170,22 @@ there is no reason for an agent to ask for fewer than 10. A 50-URL `blopus_fetch
 the same as one search. This is deliberate — agents shouldn't have to optimise against a
 pricing model to avoid waste.
 
-## Images (beta)
+## Two different things called "images"
 
-`include_images` is opt-in. It's off by default because it adds tokens most queries
-don't need — but when a user asks to *see* something, turn it on and render the URLs directly:
+These are not the same feature, and picking the wrong one produces confidently wrong pictures:
 
-```
-![title](image)
-```
+| | `blopus_images` | `blopus_search` + `include_images` |
+|---|---|---|
+| What it searches | the **image index** | the **web index** |
+| What you get back | pictures *of* the subject, with captions | whatever hero image those articles happened to use |
+| Ask it for *"blue birds"* | photographs of blue birds | press photos from Blue Bird Corporation |
+| Use it when | the user wants to **see** something | you are reading articles anyway and a thumbnail is a bonus |
 
-Blopus stores image **URLs only** — never copies of the images themselves. Marked beta because
-coverage is still growing across the index; the field is stable, the coverage is improving.
+So: *"show me…"*, *"what does X look like"*, *"find a photo of X"* → **`blopus_images`**.
+Reading and summarising, with an illustration alongside → `include_images`.
+
+Blopus stores image **URLs only** — never copies of the images themselves. Both are marked beta
+because coverage is still growing across the index; the fields are stable.
 
 ## Also available over MCP
 
