@@ -1,14 +1,14 @@
 {
   "id": "blopus",
-  "name": "Blopus — Web Search, Fetch & Images",
-  "description": "Give your agent the open web: search, read full pages, and search images — from an index Blopus crawls itself, not a reseller of another engine's results. blopus_search (freshness windows, domain filters, topic filters, inline full text) + blopus_images (a dedicated image index, not hero images scraped off web results) + blopus_topics (the filter vocabulary, free) + blopus_fetch (complete page text, 50 URLs per call). Get an API key at blopus.ai",
+  "name": "Blopus \u2014 Web Search, Fetch & Images",
+  "description": "Give your agent the open web: search, read full pages, and search images \u2014 from an index Blopus crawls itself, not a reseller of another engine's results. blopus_search (freshness windows, domain filters, topic filters, inline full text) + blopus_images (a dedicated image index, not hero images scraped off web results) + blopus_topics (the filter vocabulary, free) + blopus_fetch (complete page text, 50 URLs per call). Get an API key at blopus.ai",
   "configSchema": {
     "type": "object",
     "properties": {
       "apiKey": {
         "type": "string",
         "title": "Blopus API key",
-        "description": "Get one at https://blopus.ai — starts with blp_live_",
+        "description": "Get one at https://blopus.ai \u2014 starts with blp_live_",
         "pattern": "^blp_(live|test)_[A-Za-z0-9_-]+$"
       },
       "baseUrl": {
@@ -21,7 +21,7 @@
     "additionalProperties": false
   },
   "icon": "./icon.svg",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "activation": {
     "onStartup": true
   },
@@ -38,25 +38,25 @@
       "requiresConfig": [
         "apiKey"
       ],
-      "summary": "Web & news search over an independently crawled index. news_only for events, freshness to bound recency, include_domains/exclude_domains to constrain sources, include_content for inline full text, include_images for hero image URLs, min_words to drop stubs and tag listings, topics/exclude_topics to scope by subject area. Billed per block of 10 — count 1 and count 10 cost the same."
+      "summary": "Web & news search over an independently crawled index. news_only for events, freshness to bound recency, include_domains/exclude_domains to constrain sources, include_content for inline full text, include_images for hero image URLs, min_words to drop stubs and tag listings, topics/exclude_topics to scope by subject area. Billed per block of 10 \u2014 count 1 and count 10 cost the same."
     },
     "blopus_images": {
       "requiresConfig": [
         "apiKey"
       ],
-      "summary": "Searches the IMAGE index and returns pictures of the subject, not hero images from articles. Use it for “show me”, “what does X look like”, “find a photo of X”. This is not blopus_search with include_images, which returns whatever image those pages happened to use. Render with caption, not title — title is the raw alt attribute and is junk on roughly a quarter of images. max_syndication caps how many pages an image may appear on (default 30) and suppresses stock photography. Billed per block of 10."
+      "summary": "Searches the IMAGE index and returns pictures of the subject, not hero images from articles. Use it for \u201cshow me\u201d, \u201cwhat does X look like\u201d, \u201cfind a photo of X\u201d. This is not blopus_search with include_images, which returns whatever image those pages happened to use. Render with caption, not title \u2014 title is the raw alt attribute and is junk on roughly a quarter of images. max_syndication caps how many pages an image may appear on (default 30) and suppresses stock photography. Billed per block of 10."
     },
     "blopus_topics": {
       "requiresConfig": [
         "apiKey"
       ],
-      "summary": "Lists the subject areas valid for the topics / exclude_topics filters on blopus_search. FREE — costs no credits, because topics match EXACTLY and a wrong guess returns zero results indistinguishable from a real no-match. Call once and reuse the answer. min_docs (default 1000) hides tiny labels; 100000 gives only the largest areas. A topic describes what a PUBLICATION covers, not what an article is about."
+      "summary": "Lists the subject areas valid for the topics / exclude_topics filters on blopus_search. FREE \u2014 costs no credits, because topics match EXACTLY and a wrong guess returns zero results indistinguishable from a real no-match. Call once and reuse the answer. min_docs (default 1000) hides tiny labels; 100000 gives only the largest areas. A topic describes what a PUBLICATION covers, not what an article is about."
     },
     "blopus_fetch": {
       "requiresConfig": [
         "apiKey"
       ],
-      "summary": "Complete text of indexed pages. Batch up to 50 URLs in ONE call for the price of one search — always batch rather than looping. Unindexed URLs return in failed_results, not charged."
+      "summary": "Complete text of indexed pages. Batch up to 50 URLs in ONE call for the price of one search \u2014 always batch rather than looping. Unindexed URLs return in failed_results, not charged."
     }
   }
 }

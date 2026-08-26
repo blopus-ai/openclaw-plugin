@@ -1,7 +1,7 @@
 {
   "name": "@blopus-ai/openclaw-plugin",
-  "version": "0.3.0",
-  "description": "Give your agent the open web: search, read full pages, and pull images — from an index Blopus crawls itself, not a reseller of another engine's results. blopus_search (freshness windows, domain filters, inline full text, hero images) + blopus_fetch (complete page text, 50 URLs per call) + image search (beta). Get an API key at blopus.ai",
+  "version": "0.3.1",
+  "description": "Give your agent the open web: search, read full pages, and pull images \u2014 from an index Blopus crawls itself, not a reseller of another engine's results. blopus_search (freshness windows, domain filters, inline full text, hero images) + blopus_fetch (complete page text, 50 URLs per call) + image search (beta). Get an API key at blopus.ai",
   "type": "module",
   "main": "./dist/index.js",
   "license": "MIT",
@@ -23,15 +23,16 @@
     "mcp"
   ],
   "peerDependencies": {
-    "openclaw": "*",
-    "typebox": "*"
+    "openclaw": ">=2026.3.24"
   },
   "openclaw": {
     "compat": {
-      "pluginApi": "1.0.0"
+      "pluginApi": ">=2026.3.24",
+      "minGatewayVersion": "2026.3.24"
     },
     "build": {
-      "openclawVersion": "1.0.0"
+      "openclawVersion": "2026.7.1-2",
+      "pluginSdkVersion": "2026.7.1-2"
     },
     "icon": "./icon.svg",
     "extensions": [
@@ -59,5 +60,8 @@
   },
   "devDependencies": {
     "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "typebox": "1.3.15"
   }
 }
