@@ -1,6 +1,6 @@
 {
   "name": "@blopus-ai/openclaw-plugin",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "The web search API for all your agents. Search, read full pages, and find real images \u2014 over an index Blopus crawls itself rather than reselling another engine, so nobody else's quotas or price changes sit between your agent and the web. blopus_search covers web and news in one index, with freshness windows, include/exclude domains, topic filters, and inline full text so there is no second round trip. blopus_fetch returns complete page text for up to 50 URLs in a single call, for the price of one search \u2014 batch instead of looping. blopus_images is a dedicated image index that returns pictures of the subject, not the hero image off an article. blopus_topics lists the exact filter vocabulary and is free; it costs no credits. One key works across every agent you run. Commercial use is included on every paid plan. Get an API key at blopus.ai",
   "type": "module",
   "main": "./dist/index.js",
@@ -28,12 +28,12 @@
     "rag"
   ],
   "peerDependencies": {
-    "openclaw": ">=2026.3.24"
+    "openclaw": ">=2026.7.1"
   },
   "openclaw": {
     "compat": {
-      "pluginApi": ">=2026.3.24",
-      "minGatewayVersion": "2026.3.24"
+      "pluginApi": ">=2026.7.1",
+      "minGatewayVersion": "2026.7.1"
     },
     "build": {
       "openclawVersion": "2026.7.1-2",
